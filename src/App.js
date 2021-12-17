@@ -1,86 +1,5 @@
-import React, { useState } from 'react';
-
-function New(props) {
-  return (
-    <div className="wrap-item wrap-item-new">
-      <span className="label">New!</span>
-      {props.children}
-    </div>
-  );
-}
-
-function Popular(props) {
-  return (
-    <div className="wrap-item wrap-item-popular">
-      <span className="label">Popular!</span>
-      {props.children}
-    </div>
-  );
-}
-
-function Article(props) {
-  return (
-    <div className="item item-article">
-      <h3>
-        <a href="#">{props.title}</a>
-      </h3>
-      <p className="views">Прочтений: {props.views}</p>
-    </div>
-  );
-}
-
-function Video(props) {
-  return (
-    <div className="item item-video">
-      <iframe
-        src={props.url}
-        frameBorder="0"
-        allow="autoplay; encrypted-media"
-        allowFullScreen
-      ></iframe>
-      <p className="views">Просмотров: {props.views}</p>
-    </div>
-  );
-}
-
-const withPopularizer =
-  (Component) =>
-  ({ ...props }) => {
-    if (props.views > 999) {
-      return (
-        <Popular>
-          <Component {...props} />
-        </Popular>
-      );
-    }
-    if (props.views < 100) {
-      return (
-        <New>
-          <Component {...props} />
-        </New>
-      );
-    }
-    return <Component {...props} />;
-  };
-
-const VideoWrapper = withPopularizer(Video);
-const ArticleWrapper = withPopularizer(Article);
-const WrappedComponent = ({ ...props }) => {
-  switch (props.type) {
-    case 'video':
-      return <VideoWrapper {...props} />;
-    case 'article':
-      return <ArticleWrapper {...props} />;
-    default:
-      break;
-  }
-};
-
-function List(props) {
-  return props.list.map((item) => {
-    return <WrappedComponent key={item.url || item.title} {...item} />;
-  });
-}
+import React, { useState, useEffect } from 'react';
+import List from './components/List';
 
 export default function App() {
   const [list, setList] = useState([
@@ -115,6 +34,11 @@ export default function App() {
       views: 12,
     },
   ]);
+
+  useEffect(() => {
+    setList((prev) => [...prev]);
+    return () => {};
+  }, [list]);
 
   return <List list={list} />;
 }

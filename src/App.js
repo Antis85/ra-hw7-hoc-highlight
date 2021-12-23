@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react';
 import List from './components/List';
 
 export default function App() {
@@ -34,11 +35,6 @@ export default function App() {
       views: 12,
     },
   ]);
-
-  useEffect(() => {
-    setList((prev) => [...prev]);
-    return () => {};
-  }, [list]);
 
   return <List list={list} />;
 }
